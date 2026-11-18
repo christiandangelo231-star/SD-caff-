@@ -1,0 +1,890 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cialde Caffè - Listino Ufficiale 2026</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #FFF8F0;
+  padding-bottom: 110px;
+}
+
+header {
+  background: #2B1A12;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 { font-size: 28px; }
+header p { color: #D4A373; margin-top: 5px; }
+
+.search {
+  padding: 15px;
+  background: white;
+  position: sticky;
+  top: 86px;
+  z-index: 9;
+  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+}
+
+.search input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search input:focus {
+  border-color: #6F4E37;
+}
+
+.filtri {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 15px;
+  background: white;
+}
+
+.filtri button {
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  background: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.filtri button.attivo {
+  background: #2B1A12;
+  color: white;
+}
+
+.etichetta-prodotto {
+  display: inline-block;
+  padding: 12px 20px;
+  margin: 18px 15px 5px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.12);
+}
+
+.etichetta-prodotto.cialde {
+  background: #2B1A12;
+  color: #FFC300;
+}
+
+.etichetta-prodotto.capsule {
+  background: #6F4E37;
+  color: white;
+}
+
+.etichetta-prodotto.altro {
+  background: #A0522D;
+  color: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.card .marca {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card h3 {
+  font-size: 15px;
+  margin: 6px 0;
+  min-height: 38px;
+  line-height: 1.2;
+}
+
+.pezzi {
+  font-size: 12px;
+  color: #6F4E37;
+  background: #FFF0D9;
+  padding: 4px 8px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.prezzo {
+  font-size: 22px;
+  font-weight: 900;
+  color: #2B1A12;
+  margin: 10px 0 3px;
+}
+
+.prezzo small {
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+}
+
+.prezzo-speciale {
+  display: block;
+  color: #168642;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.card button {
+  background: #25D366;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.card button:hover {
+  background: #1DA851;
+}
+
+.vuoto {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 35px;
+  color: #888;
+}
+
+.carrello {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  background: #2B1A12;
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 99;
+  box-shadow: 0 4px 15px rgba(0,0,0,.25);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.carrello-testa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.carrello b {
+  color: #FFC300;
+}
+
+.prodotto-carrello {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid #634B3E;
+  padding-top: 10px;
+  font-size: 13px;
+}
+
+.controlli {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.controlli button {
+  border: none;
+  border-radius: 6px;
+  width: 27px;
+  height: 27px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.carrello-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #634B3E;
+  padding-top: 12px;
+}
+
+.carrello a {
+  background: #25D366;
+  color: white;
+  padding: 11px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.svuota {
+  background: #8b3434;
+  color: white;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 13px;
+}
+
+@media(max-width:380px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  .card { padding: 10px; }
+  .prezzo { font-size: 19px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>☕ CIALDE CAFFÈ</h1>
+  <p>Cialde ESE 44mm e Capsule - Listino 2026</p>
+</header>
+
+<div class="search">
+  <input
+    id="cerca"
+    type="search"
+    placeholder="🔍 Cerca: Borbone, Lollo, Kimbo..."
+  >
+</div>
+
+<div class="filtri" id="filtri">
+  <button class="attivo" data-filtro="tutti">Tutti</button>
+  <button data-filtro="cialde">Cialde</button>
+  <button data-filtro="capsule">Capsule</button>
+  <button data-filtro="altro">Caffè e non solo</button>
+  <button data-filtro="Borbone">Borbone</button>
+  <button data-filtro="Lollo">Lollo</button>
+  <button data-filtro="Kimbo">Kimbo</button>
+  <button data-filtro="Toraldo">Toraldo</button>
+  <button data-filtro="I Love">I Love Coffee</button>
+  <button data-filtro="150">Da 150</button>
+  <button data-filtro="50">Da 50</button>
+</div>
+
+<!-- SEZIONE CIALDE -->
+
+<div id="sezioneCialde">
+
+  <div class="etichetta-prodotto cialde">
+    ☕ CAFFÈ IN CIALDE ESE 44mm
+  </div>
+
+  <div class="grid" id="gridCialde"></div>
+
+</div>
+
+<!-- SEZIONE CAPSULE -->
+
+<div id="sezioneCapsule">
+
+  <div class="etichetta-prodotto capsule">
+    ☕ CAFFÈ IN CAPSULE
+  </div>
+
+  <div class="grid" id="gridCapsule"></div>
+
+</div>
+
+<!-- SEZIONE CAFFÈ E NON SOLO -->
+
+<div id="sezioneAltro">
+
+  <div class="etichetta-prodotto altro">
+    🎄 CAFFÈ E NON SOLO
+  </div>
+
+  <div class="grid" id="gridAltro"></div>
+
+</div>
+
+<!-- CARRELLO -->
+
+<div class="carrello" id="carrello">
+
+  <div class="carrello-testa">
+    <div>
+      <span id="conteggio">0 prodotti</span><br>
+      <b id="totale">Totale: € 0,00</b>
+    </div>
+
+    <button class="svuota" onclick="svuotaCarrello()">
+      Svuota
+    </button>
+  </div>
+
+  <div id="listaCarrello"></div>
+
+  <div class="carrello-footer">
+    <b id="totaleFinale">€ 0,00</b>
+
+    <a href="#" id="ordinaBtn" target="_blank">
+      Ordina su WhatsApp →
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  📍 Arzano (NA)<br>
+  Prezzi da listino - Aggiornato 2026
+</footer>
+
+<script>
+
+const prodotti = [
+
+  // CIALDE ESE 44mm
+
+  {name:"Kimbo Macinato Fresco 150", prezzo:21, marca:"Kimbo", pezzi:150, categoria:"cialde"},
+  {name:"Caffè Motta 170", prezzo:22, marca:"Motta", pezzi:170, categoria:"cialde"},
+  {name:"Donna Regina 170", prezzo:22, marca:"Donna Regina", pezzi:170, categoria:"cialde"},
+  {name:"Caffè Iuliano 200", prezzo:21, marca:"Caffè Iuliano", pezzi:200, categoria:"cialde"},
+  {name:"I Love Coffee 170 + 5 Tisane", prezzo:20, marca:"I Love Coffee", pezzi:170, categoria:"cialde"},
+  {name:"Lollo Argento 150", prezzo:18, marca:"Lollo", pezzi:150, categoria:"cialde"},
+  {name:"Strega Caffè 150", prezzo:18, marca:"Strega", pezzi:150, categoria:"cialde"},
+  {name:"Borbone Mia Napoli 100", prezzo:15, marca:"Borbone", pezzi:100, categoria:"cialde"},
+  {name:"Kimbo Pompei 160", prezzo:20, marca:"Kimbo", pezzi:160, categoria:"cialde"},
+  {name:"Solespresso 150", prezzo:19, marca:"Solespresso", pezzi:150, categoria:"cialde"},
+  {name:"Solespresso Caffè Dei Signori 200", prezzo:22, marca:"Solespresso", pezzi:200, categoria:"cialde"},
+  {name:"Toraldo Dolce E Cremoso 90", prezzo:15, marca:"Toraldo", pezzi:90, categoria:"cialde"},
+  {name:"Passalacqua Elmir 100", prezzo:18, marca:"Elmir", pezzi:100, categoria:"cialde"},
+  {name:"Toraldo Forte E Cremoso 150", prezzo:21, marca:"Toraldo", pezzi:150, categoria:"cialde"},
+  {name:"I Love Coffee 50", prezzo:7.50, marca:"I Love Coffee", pezzi:50, categoria:"cialde"},
+  {name:"Lollo Amore 90", prezzo:13, marca:"Lollo", pezzi:90, categoria:"cialde"},
+  {name:"I Love Coffee 100", prezzo:15, marca:"I Love Coffee", pezzi:100, categoria:"cialde"},
+  {name:"Borbone Rosso 50", prezzo:10, marca:"Borbone", pezzi:50, categoria:"cialde"},
+  {name:"Borbone Blu 50", prezzo:11, marca:"Borbone", pezzi:50, categoria:"cialde"},
+  {name:"Borbone Deka 50", prezzo:12, marca:"Borbone", pezzi:50, categoria:"cialde"},
+  {name:"Kosè Cremosa 50", prezzo:8.50, marca:"Kosè", pezzi:50, categoria:"cialde"},
+  {name:"Kaffettera 160", prezzo:18.50, marca:"Kaffettera", pezzi:160, categoria:"cialde"},
+  {name:"Kimbo Pompei", prezzo:9, marca:"Kimbo", pezzi:null, categoria:"cialde"},
+  {name:"Lollo Oro 150", prezzo:26, marca:"Lollo", pezzi:150, categoria:"cialde"},
+  {name:"Siag 50 + kit", prezzo:8, marca:"Siag", pezzi:50, categoria:"cialde"},
+  {name:"Siag Oro 50 + kit", prezzo:9, marca:"Siag", pezzi:50, categoria:"cialde"},
+  {name:"Toraldo Cremoso 50", prezzo:8, marca:"Toraldo", pezzi:50, categoria:"cialde"},
+  {name:"Toraldo Cremoso 150", prezzo:21, marca:"Toraldo", pezzi:150, categoria:"cialde"},
+  {name:"Ginseng Cialde 18", prezzo:6, marca:"Ginseng", pezzi:18, categoria:"cialde"},
+  {name:"Moreno 150", prezzo:20, marca:"Moreno", pezzi:150, categoria:"cialde"},
+  {name:"Messina 90", prezzo:12, marca:"Messina", pezzi:90, categoria:"cialde"},
+  {name:"Napoli Express 50 + kit", prezzo:8, marca:"Napoli Express", pezzi:50, categoria:"cialde"},
+  {name:"Passalacqua Manhoa 150", prezzo:29, marca:"Manhoa", pezzi:150, categoria:"cialde"},
+
+  // CAPSULE
+
+  {name:"Borbone Nero Dolce Gusto", prezzo:12.50, marca:"Borbone", pezzi:50, categoria:"capsule"},
+  {name:"Borbone Rosso Dolce Gusto", prezzo:13.50, marca:"Borbone", pezzi:50, categoria:"capsule"},
+  {name:"Borbone Oro Dolce Gusto", prezzo:23, marca:"Borbone", pezzi:90, categoria:"capsule"},
+  {name:"Iuliano Dolce Gusto", prezzo:10, marca:"Iuliano", pezzi:45, categoria:"capsule"},
+  {name:"Lollo Dolce Gusto", prezzo:20, marca:"Lollo", pezzi:96, categoria:"capsule"},
+  {name:"Pop Ginseng Dolce Gusto", prezzo:7, marca:"Pop", pezzi:16, categoria:"capsule"},
+  {name:"Ymala Ginseng Dolce Gusto", prezzo:7, marca:"Ymala", pezzi:16, categoria:"capsule"},
+  {name:"Borbone Deka A Modo Mio", prezzo:23, marca:"Borbone", pezzi:100, categoria:"capsule"},
+  {name:"Borbone Blu A Modo Mio", prezzo:21, marca:"Borbone", pezzi:100, categoria:"capsule"},
+  {name:"Borbone Rosso A Modo Mio", prezzo:21, marca:"Borbone", pezzi:100, categoria:"capsule"},
+  {name:"Barbaro Blu Dolce Gusto", prezzo:22, marca:"Barbaro", pezzi:90, categoria:"capsule"},
+  {name:"Condorè A Modo Mio", prezzo:19, marca:"Condorè", pezzi:100, categoria:"capsule"},
+  {name:"Kimbo A Modo Mio", prezzo:12, marca:"Kimbo", pezzi:50, categoria:"capsule"},
+  {name:"Lollo A Modo Mio", prezzo:20, marca:"Lollo", pezzi:100, categoria:"capsule"},
+  {name:"Moreno A Modo Mio", prezzo:18, marca:"Moreno", pezzi:100, categoria:"capsule"},
+  {name:"Toraldo Cremosa A Modo Mio", prezzo:20, marca:"Toraldo", pezzi:100, categoria:"capsule"},
+
+  // CAFFÈ E NON SOLO
+
+  {
+  name:" Brut",
+  prezzo:15,
+  marca:"Brut",
+  pezzi:null,
+  dettaglio:"Spumante",
+  categoria:"altro"
+},
+
+{
+  name: "TrentoDoc",
+  prezzo:15,
+  marca:"TrentoDoc",
+  pezzi:null,
+  dettaglio:"Spumante",
+  categoria:"altro"
+},
+
+{
+  name:"Ferrari",
+  prezzo:15,
+  marca:"Ferrari",
+  pezzi:null,
+  dettaglio:"Spumante",
+  categoria:"altro"
+},
+
+  {
+    name:"Chicchi di Caffè Ricoperti di Cioccolato",
+    prezzo:2,
+    marca:"Dolci",
+    pezzi:25,
+    dettaglio:"25 chicchi",
+    categoria:"altro"
+  },
+
+  {
+    name:"Babbo Natale di Cioccolato 150g",
+    prezzo:2,
+    marca:"Cioccolato",
+    pezzi:1,
+    dettaglio:"150 grammi",
+    categoria:"altro",
+    prezzoScontato:1.50,
+    soglia:10
+  }
+
+];
+
+let filtroAttivo = "tutti";
+let carrello = {};
+
+function euro(numero) {
+  return numero.toFixed(2).replace(".", ",");
+}
+
+// CALCOLO PREZZO UNITARIO CON EVENTUALE SCONTO
+
+function prezzoUnitario(p, quantita) {
+
+  if (p.prezzoScontato && quantita >= p.soglia) {
+    return p.prezzoScontato;
+  }
+
+  return p.prezzo;
+}
+
+// VISUALIZZAZIONE PRODOTTI
+
+function mostra() {
+
+  const testo = document.getElementById("cerca")
+    .value.toLowerCase().trim();
+
+  const gridCialde = document.getElementById("gridCialde");
+  const gridCapsule = document.getElementById("gridCapsule");
+  const gridAltro = document.getElementById("gridAltro");
+
+  const sezioneCialde = document.getElementById("sezioneCialde");
+  const sezioneCapsule = document.getElementById("sezioneCapsule");
+  const sezioneAltro = document.getElementById("sezioneAltro");
+
+  gridCialde.innerHTML = "";
+  gridCapsule.innerHTML = "";
+  gridAltro.innerHTML = "";
+
+  const risultati = prodotti.filter(p => {
+
+    const nome = p.name.toLowerCase();
+    const marca = p.marca.toLowerCase();
+
+    let okFiltro = true;
+
+    if (
+      filtroAttivo === "cialde" ||
+      filtroAttivo === "capsule" ||
+      filtroAttivo === "altro"
+    ) {
+
+      okFiltro = p.categoria === filtroAttivo;
+
+    } else if (filtroAttivo === "150") {
+
+      okFiltro = p.pezzi !== null && p.pezzi >= 150;
+
+    } else if (filtroAttivo === "50") {
+
+      okFiltro = p.pezzi === 50;
+
+    } else if (filtroAttivo !== "tutti") {
+
+      okFiltro =
+        nome.includes(filtroAttivo.toLowerCase()) ||
+        marca.includes(filtroAttivo.toLowerCase());
+
+    }
+
+    const okTesto =
+      nome.includes(testo) ||
+      marca.includes(testo) ||
+      p.categoria.includes(testo) ||
+      (p.dettaglio || "").toLowerCase().includes(testo);
+
+    return okFiltro && okTesto;
+
+  });
+
+  // CREAZIONE SCHEDA PRODOTTO
+
+  function creaScheda(p) {
+
+    const indice = prodotti.indexOf(p);
+
+    const prezzoPezzo = p.pezzi && p.categoria !== "altro"
+      ? "€ " + euro(p.prezzo / p.pezzi) + " a pezzo"
+      : "";
+
+    const quantita = p.dettaglio
+      ? p.dettaglio
+      : p.pezzi
+        ? p.pezzi + " pezzi"
+        : (p.categoria === "cialde"
+          ? "Cialde ESE 44mm"
+          : "Capsule");
+
+    const prezzoSpeciale = p.prezzoScontato
+      ? `<span class="prezzo-speciale">
+           Da ${p.soglia} pezzi: € ${euro(p.prezzoScontato)} cad.
+         </span>`
+      : "";
+
+    return `
+      <div class="card">
+
+        <div class="marca">${p.marca}</div>
+
+        <h3>${p.name}</h3>
+
+        <div class="pezzi">
+          ${quantita}
+        </div>
+
+        <div class="prezzo">
+          € ${euro(p.prezzo)}
+          ${prezzoPezzo ? `<br><small>${prezzoPezzo}</small>` : ""}
+          ${prezzoSpeciale}
+        </div>
+
+        <button onclick="aggiungi(${indice})">
+          + Aggiungi
+        </button>
+
+      </div>
+    `;
+  }
+
+  // DIVISIONE CATEGORIE
+
+  const cialde = risultati.filter(
+    p => p.categoria === "cialde"
+  );
+
+  const capsule = risultati.filter(
+    p => p.categoria === "capsule"
+  );
+
+  const altro = risultati.filter(
+    p => p.categoria === "altro"
+  );
+
+  // VISUALIZZA CIALDE
+
+  if (cialde.length > 0) {
+
+    sezioneCialde.style.display = "block";
+    gridCialde.innerHTML = cialde.map(creaScheda).join("");
+
+  } else {
+
+    sezioneCialde.style.display = "none";
+
+  }
+
+  // VISUALIZZA CAPSULE
+
+  if (capsule.length > 0) {
+
+    sezioneCapsule.style.display = "block";
+    gridCapsule.innerHTML = capsule.map(creaScheda).join("");
+
+  } else {
+
+    sezioneCapsule.style.display = "none";
+
+  }
+
+  // VISUALIZZA CAFFÈ E NON SOLO
+
+  if (altro.length > 0) {
+
+    sezioneAltro.style.display = "block";
+    gridAltro.innerHTML = altro.map(creaScheda).join("");
+
+  } else {
+
+    sezioneAltro.style.display = "none";
+
+  }
+
+  // NESSUN RISULTATO
+
+  if (risultati.length === 0) {
+
+    sezioneCialde.style.display = "block";
+
+    gridCialde.innerHTML =
+      '<div class="vuoto">Nessun prodotto trovato ☕</div>';
+
+  }
+
+}
+
+// FILTRI
+
+document.querySelectorAll("#filtri button").forEach(btn => {
+
+  btn.addEventListener("click", function() {
+
+    filtroAttivo = this.dataset.filtro;
+
+    document.querySelectorAll("#filtri button").forEach(b => {
+      b.classList.remove("attivo");
+    });
+
+    this.classList.add("attivo");
+
+    mostra();
+
+  });
+
+});
+
+// RICERCA
+
+document.getElementById("cerca")
+  .addEventListener("input", mostra);
+
+// AGGIUNGI AL CARRELLO
+
+function aggiungi(indice) {
+
+  if (!carrello[indice]) {
+    carrello[indice] = 0;
+  }
+
+  carrello[indice]++;
+
+  aggiornaCarrello();
+
+}
+
+// MODIFICA QUANTITÀ
+
+function modificaQuantita(indice, variazione) {
+
+  if (!carrello[indice]) return;
+
+  carrello[indice] += variazione;
+
+  if (carrello[indice] <= 0) {
+    delete carrello[indice];
+  }
+
+  aggiornaCarrello();
+
+}
+
+// RIMUOVI PRODOTTO
+
+function rimuovi(indice) {
+
+  delete carrello[indice];
+
+  aggiornaCarrello();
+
+}
+
+// SVUOTA CARRELLO
+
+function svuotaCarrello() {
+
+  carrello = {};
+
+  aggiornaCarrello();
+
+}
+
+// AGGIORNA CARRELLO
+
+function aggiornaCarrello() {
+
+  const contenitore = document.getElementById("carrello");
+  const lista = document.getElementById("listaCarrello");
+
+  const elementi = Object.entries(carrello);
+
+  const numeroProdotti = elementi.reduce(
+    (somma, [indice, quantita]) => somma + quantita, 0
+  );
+
+  // CALCOLO TOTALE CON SCONTI
+
+  const totale = elementi.reduce(
+    (somma, [indice, quantita]) =>
+      somma + prezzoUnitario(prodotti[indice], quantita) * quantita,
+    0
+  );
+
+  if (numeroProdotti === 0) {
+
+    contenitore.style.display = "none";
+    return;
+
+  }
+
+  contenitore.style.display = "flex";
+
+  document.getElementById("conteggio").innerText =
+    numeroProdotti +
+    (numeroProdotti === 1 ? " prodotto" : " prodotti") +
+    " nel carrello";
+
+  document.getElementById("totale").innerText =
+    "Totale: € " + euro(totale);
+
+  document.getElementById("totaleFinale").innerText =
+    "€ " + euro(totale);
+
+  lista.innerHTML = "";
+
+  // ELENCO PRODOTTI NEL CARRELLO
+
+  elementi.forEach(([indice, quantita]) => {
+
+    const p = prodotti[indice];
+
+    const prezzo = prezzoUnitario(p, quantita);
+    const subtotale = prezzo * quantita;
+
+    const scontoApplicato =
+      p.prezzoScontato && quantita >= p.soglia;
+
+    lista.innerHTML += `
+      <div class="prodotto-carrello">
+
+        <div>
+          <strong>${p.name}</strong><br>
+          ${quantita} x € ${euro(prezzo)}
+          <br>
+          Subtotale: € ${euro(subtotale)}
+          ${scontoApplicato
+            ? '<br><span style="color:#7CFF9B">Sconto applicato!</span>'
+            : ''}
+        </div>
+
+        <div class="controlli">
+
+          <button onclick="modificaQuantita(${indice},-1)">−</button>
+
+          <strong>${quantita}</strong>
+
+          <button onclick="modificaQuantita(${indice},1)">+</button>
+
+          <button
+            onclick="rimuovi(${indice})"
+            style="background:#8b3434;color:white">
+            ×
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  });
+
+  // MESSAGGIO WHATSAPP
+
+  let messaggio = "Ciao! Voglio effettuare questo ordine:\n\n";
+
+  elementi.forEach(([indice, quantita]) => {
+
+    const p = prodotti[indice];
+
+    const prezzo = prezzoUnitario(p, quantita);
+    const subtotale = prezzo * quantita;
+
+    messaggio +=
+      "- " + p.name +
+      " x " + quantita +
+      " (" + euro(prezzo) + " cad.)" +
+      " = € " + euro(subtotale) + "\n";
+
+  });
+
+  messaggio += "\nTotale ordine: € " + euro(totale);
+
+  const telefono = "393479180849";
+
+  document.getElementById("ordinaBtn").href =
+    "https://wa.me/" + telefono +
+    "?text=" + encodeURIComponent(messaggio);
+
+}
+
+// AVVIO
+
+mostra();
+
+</script>
+
+</body>
+</html>
